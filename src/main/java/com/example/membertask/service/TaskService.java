@@ -58,7 +58,7 @@ public class TaskService {
      */
     @Transactional
     public TaskGetSingleResponseDto taskGetSingleService(Long taskId) {
-        Task foundTask = taskRepository.findById(taskId)
+        Task foundTask = taskRepository.findByIdAndIsDeletedFalse(taskId)
                 .orElseThrow(() -> new RuntimeException("not found task"));
         Long foundTaskId = foundTask.getTaskId();
 //        String foundMemberName = foundTask.getMemberName();
@@ -79,7 +79,7 @@ public class TaskService {
     @Transactional
     public TaskGetAllResponseDto taskGetAllService() {
         //조회
-        List<Task> foundTasks = taskRepository.findAll();
+        List<Task> foundTasks = taskRepository.findAllByIsDeletedFalse();
 
          List<TaskGetAllResponseDto.TaskAllResponseDto> allTask
                  = foundTasks.stream()
@@ -129,6 +129,18 @@ public class TaskService {
         } else {
             throw new RuntimeException("bad request");
         }
+    }
+    /**
+     * 삭제 서비스
+     */
+    @Transactional
+    public TaskDeleteResponseDto taskDeleteSingleService(Long deleteTaskId) {
+        Task foundTask = taskRepository.findById(deleteTaskId)
+                .orElseThrow(() -> new RuntimeException("found not task"));
+
+        foundTask.delete();
+
+        return new TaskDeleteResponseDto(200, "delete");
     }
 
 }

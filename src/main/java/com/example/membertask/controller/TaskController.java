@@ -1,6 +1,7 @@
 package com.example.membertask.controller;
 
 import com.example.membertask.dto.taskdto.*;
+import com.example.membertask.enetity.Task;
 import com.example.membertask.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,15 @@ public class TaskController {
             @RequestBody TaskUpdateRequestDto taskUpdateRequestDto
             ) {
         return taskService.taskUpdateAllService(taskUpdateRequestDto, taskId);
+    }
+    /**
+     * 삭제 api
+     */
+    @DeleteMapping("/{taskId}")
+    public TaskDeleteResponseDto deleteSingleApi(
+            @PathVariable("taskId") Long taskId
+    ) {
+        return taskService.taskDeleteSingleService(taskId);
     }
 
 

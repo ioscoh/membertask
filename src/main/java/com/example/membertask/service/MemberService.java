@@ -58,7 +58,7 @@ public class MemberService {
     public MemberGetSingleResponseDto memberGetSingleService(Long id) {
 
         //조회 & 검증
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("member not found"));
 
         Long foundId = member.getId();
@@ -83,7 +83,7 @@ public class MemberService {
     //컬랙션 변수에 다시 담아준다.
     @Transactional
     public MemberGetAllResponseDto memberGetAllService() {
-        List<Member> all = memberRepository.findAll();
+        List<Member> all = memberRepository.findAllByIsDeletedFalse();
 
         //포문
 //        List<GetAllResponseDto> allMember = new ArrayList<>();

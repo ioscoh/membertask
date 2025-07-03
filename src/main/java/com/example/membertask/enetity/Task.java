@@ -17,6 +17,9 @@ public class Task {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(nullable = false)
+    private Boolean isDeleted = false;
+
     //생
     /**
      * 아래 생성자는 JPA 에서 사용합니다.
@@ -57,6 +60,11 @@ public class Task {
 
         this.title = title;
         this.content = content;
+        return this;
+    }
+
+    public Task delete() {
+        this.isDeleted = true;
         return this;
     }
 
