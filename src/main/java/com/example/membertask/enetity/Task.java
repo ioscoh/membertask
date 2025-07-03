@@ -63,9 +63,8 @@ public class Task {
         return this;
     }
 
-    public Task delete() {
+    public void delete() {
         this.isDeleted = true;
-        return this;
     }
 
 
