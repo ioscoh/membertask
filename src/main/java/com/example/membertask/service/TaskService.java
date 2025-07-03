@@ -102,35 +102,31 @@ public class TaskService {
         //데이터 준비
         String taskContent = taskUpdateRequestDto.getContent();
         String taskTitle = taskUpdateRequestDto.getTitle();
+        Long memberId = taskUpdateRequestDto.getMemberId();
 
         //memberId 와 taskId 비교
         //테스크 조회 & 검증
-        Optional<Task> task = taskRepository.findByIdAndIsDeletedFalse(updateTaskId);
-        Task foundTask1 = task.get();
-        Long taskId1 = foundTask1.getTaskId();
-        Member foundTaskMember = task.get().getMember();
+        Task task = taskRepository.findById(updateTaskId)
+                .orElseThrow(() -> new RuntimeException("found not task"));
+        Long foundTaskId = task.getTaskId();
+        Member foundTaskMember = task.getMember();
         Long foundMemberId = foundTaskMember.getId();
 
-        Task foundedTask2 = taskRepository.findByIdAndIsDeletedFalse(taskId1)
+        Task foundedTask2 = taskRepository.findByIdAndIsDeletedFalse(foundTaskId)
                 .orElseThrow(() -> new RuntimeException("found not task"));
 
         Long taskId2 = foundedTask2.getTaskId();
 
         //멤버 조회 & 검증
-        if (Objects.equals(foundMemberId, taskId2)) {
-            Member foundMember = memberRepository.findById(foundMemberId)
-                    .orElseThrow(() -> new RuntimeException("found not member"));
-
-            Long foundedMemberId = foundMember.getId();
-
+        if (Objects.equals(foundMemberId, memberId)) {
             //업데이트
-            Task updateTask = foundedTask2.update(taskTitle, taskContent);
+            Task updateTask = task.update(taskTitle, taskContent);
             String updatedTitle = updateTask.getTaskTitle();
             String updatedContent = updateTask.getTaskContent();
 
             return new TaskUpdateResponseDto(
                     200, "success",
-                    foundedMemberId, taskId2, updatedTitle, updatedContent);
+                    foundMemberId, taskId2, updatedTitle, updatedContent);
         } else {
             throw new RuntimeException("bad request");
         }
