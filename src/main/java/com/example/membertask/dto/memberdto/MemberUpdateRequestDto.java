@@ -11,14 +11,4 @@ public class MemberUpdateRequestDto {
 
     private String password;
 
-    public MemberUpdateRequestDto(
-            String memberName, String email, String password
-    ) {
-        this.memberName = memberName;
-        this.email = email;
-        this.password = password;
-    }
-
-
-
 }

@@ -9,13 +9,16 @@ public class TaskCreateResponseDto {
 
     private String message;
 
-    private Long id;
+    private Long memberId;
+
+    private Long taskId;
 
     public TaskCreateResponseDto(
-            Integer status, String message, Long id
+            Integer status, String message, Long memberId, Long taskId
     ) {
         this.status = status;
         this.message = message;
-        this.id = id;
+        this.memberId = memberId;
+        this.taskId = taskId;
     }
 }

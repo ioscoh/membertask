@@ -11,12 +11,6 @@ public class MemberCreateRequestDto {
 
     private String password;
 
-    public MemberCreateRequestDto(
-            String memberName, String email, String password
-    ) {
-        this.memberName = memberName;
-        this.email = email;
-        this.password = password;
-    }
+
 
 }

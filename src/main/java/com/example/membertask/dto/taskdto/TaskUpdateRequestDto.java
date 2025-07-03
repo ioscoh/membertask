@@ -14,11 +14,4 @@ public class TaskUpdateRequestDto {
 
     private String content;
 
-    public TaskUpdateRequestDto(
-            Long memberId,String title, String content
-    ) {
-        this.memberId = memberId;
-        this.title = title;
-        this.content = content;
-    }
 }
