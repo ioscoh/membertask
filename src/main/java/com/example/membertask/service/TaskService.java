@@ -106,27 +106,23 @@ public class TaskService {
 
         //memberId 와 taskId 비교
         //테스크 조회 & 검증
-        Task task = taskRepository.findById(updateTaskId)
+        Task foundTask = taskRepository.findByIdAndIsDeletedFalse(updateTaskId)
                 .orElseThrow(() -> new RuntimeException("found not task"));
-        Long foundTaskId = task.getTaskId();
-        Member foundTaskMember = task.getMember();
+        Long foundTaskId = foundTask.getTaskId();
+        Member foundTaskMember = foundTask.getMember();
         Long foundMemberId = foundTaskMember.getId();
 
-        Task foundedTask2 = taskRepository.findByIdAndIsDeletedFalse(foundTaskId)
-                .orElseThrow(() -> new RuntimeException("found not task"));
-
-        Long taskId2 = foundedTask2.getTaskId();
 
         //멤버 조회 & 검증
         if (Objects.equals(foundMemberId, memberId)) {
             //업데이트
-            Task updateTask = task.update(taskTitle, taskContent);
+            Task updateTask = foundTask.update(taskTitle, taskContent);
             String updatedTitle = updateTask.getTaskTitle();
             String updatedContent = updateTask.getTaskContent();
 
             return new TaskUpdateResponseDto(
                     200, "success",
-                    foundMemberId, taskId2, updatedTitle, updatedContent);
+                    foundMemberId, foundTaskId, updatedTitle, updatedContent);
         } else {
             throw new RuntimeException("bad request");
         }
