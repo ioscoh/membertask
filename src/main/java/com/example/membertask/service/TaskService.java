@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +42,7 @@ public class TaskService {
         String content = taskCreateRequestDto.getContent();
 
         //멤버를 아이디로 조회하고 검증로직을 실행
-        Member foundMember = memberRepository.findById(memberId)
+        Member foundMember = memberRepository.findByIdAndIsDeletedFalse(memberId)
                 .orElseThrow(() -> new RuntimeException("not found member"));
 
         //엔티티 만들기
@@ -61,7 +63,6 @@ public class TaskService {
         Task foundTask = taskRepository.findByIdAndIsDeletedFalse(taskId)
                 .orElseThrow(() -> new RuntimeException("not found task"));
         Long foundTaskId = foundTask.getTaskId();
-//        String foundMemberName = foundTask.getMemberName();
         Member foundTaskMember = foundTask.getMember();
         Long foundedMemberId = foundTaskMember.getId();
         String foundMemberName = foundTaskMember.getMemberName();//클린코드 관점 중 하나
@@ -87,7 +88,7 @@ public class TaskService {
                         task.getMemberId(), task.getTaskId(),
                         task.getMember().getMemberName(), task.getTaskTitle(),
                         task.getTaskContent()
-                )).collect(Collectors.toList());
+                )).toList();
 
          return new TaskGetAllResponseDto(200, "success", allTask);
     }
@@ -101,31 +102,35 @@ public class TaskService {
         //데이터 준비
         String taskContent = taskUpdateRequestDto.getContent();
         String taskTitle = taskUpdateRequestDto.getTitle();
-        Long memberId = taskUpdateRequestDto.getMemberId();
 
         //memberId 와 taskId 비교
         //테스크 조회 & 검증
-        Task task = taskRepository.findById(updateTaskId)
-                .orElseThrow(() -> new RuntimeException("found not task"));
-        Long foundTaskId = task.getTaskId();
-        Member foundTaskMember = task.getMember();
+        Optional<Task> task = taskRepository.findByIdAndIsDeletedFalse(updateTaskId);
+        Task foundTask1 = task.get();
+        Long taskId1 = foundTask1.getTaskId();
+        Member foundTaskMember = task.get().getMember();
         Long foundMemberId = foundTaskMember.getId();
 
+        Task foundedTask2 = taskRepository.findByIdAndIsDeletedFalse(taskId1)
+                .orElseThrow(() -> new RuntimeException("found not task"));
+
+        Long taskId2 = foundedTask2.getTaskId();
+
         //멤버 조회 & 검증
-        if (foundMemberId == memberId) {
-            Member foundMember = memberRepository.findById(memberId)
+        if (Objects.equals(foundMemberId, taskId2)) {
+            Member foundMember = memberRepository.findById(foundMemberId)
                     .orElseThrow(() -> new RuntimeException("found not member"));
 
             Long foundedMemberId = foundMember.getId();
 
             //업데이트
-            Task updateTask = task.update(taskTitle, taskContent);
+            Task updateTask = foundedTask2.update(taskTitle, taskContent);
             String updatedTitle = updateTask.getTaskTitle();
             String updatedContent = updateTask.getTaskContent();
 
             return new TaskUpdateResponseDto(
                     200, "success",
-                    foundedMemberId, foundTaskId, updatedTitle, updatedContent);
+                    foundedMemberId, taskId2, updatedTitle, updatedContent);
         } else {
             throw new RuntimeException("bad request");
         }
@@ -135,7 +140,7 @@ public class TaskService {
      */
     @Transactional
     public TaskDeleteResponseDto taskDeleteSingleService(Long deleteTaskId) {
-        Task foundTask = taskRepository.findById(deleteTaskId)
+        Task foundTask = taskRepository.findByIdAndIsDeletedFalse(deleteTaskId)
                 .orElseThrow(() -> new RuntimeException("found not task"));
 
         foundTask.delete();

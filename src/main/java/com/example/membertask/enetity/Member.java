@@ -94,9 +94,8 @@ public class Member {
 
         return this;
     }
-    public Member delete() {
+    public void delete() {
         this.isDeleted = true;
-        return this;
     }
 
     //기

@@ -15,7 +15,7 @@ public class MemberController {
     private final MemberService memberService;
 
     //생
-    //@RequiredArgsConstructor
+
 
     //기
 
@@ -23,13 +23,10 @@ public class MemberController {
      *생성 api
      */
     @PostMapping
-    public ResponseEntity<MemberCreateResponseDto> createMemberApi(
+    public MemberCreateResponseDto createMemberApi(
             @RequestBody MemberCreateRequestDto memberCreateRequestDto
     ) {
-        MemberCreateResponseDto memberCreateResponseDto
-                = memberService.memberCreateService(memberCreateRequestDto);
-
-        return new ResponseEntity<>(memberCreateResponseDto, HttpStatus.CREATED);
+        return memberService.memberCreateService(memberCreateRequestDto);
     }
 
     /**
@@ -62,6 +59,7 @@ public class MemberController {
      */
     @PutMapping("/{id}")
     public MemberUpdateResponseDto updateMemberAllApi(
+            //TODO: 2번 회원이 1번 회원 정보를 수정시 정상 작동 하므로 본인의 값만 수정할 수 있도록 코드개선 필요.(인증인가 구현 이후)
             @PathVariable("id") Long id,
             @RequestBody MemberUpdateRequestDto memberUpdateRequestDto
     ) {
@@ -72,6 +70,7 @@ public class MemberController {
      */
     @DeleteMapping("/{id}")
     public MemberDeleteResponseDto deleteMemberApi(
+            //TODO: 2번 회원이 1번 회원 정보를 삭제시 정상 작동 하므로 본인의 값만 삭제할 수 있도록 코드개선 필요.(인증인가 구현 이후)
             @PathVariable("id") Long id
     ) {
         return memberService.memberDeleteService(id);

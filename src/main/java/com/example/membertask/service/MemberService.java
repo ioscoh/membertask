@@ -40,9 +40,9 @@ public class MemberService {
         String email = memberCreateRequestDto.getEmail();
         String password = memberCreateRequestDto.getPassword();
 
-//        Member fromMemberCreateRequestDto
+        //TODO: MemberCreateRequestDto 를 MemberEntity 로 변환하는 코드 표현 개선 필요.
+//                Member fromMemberCreateRequestDto
 //                = Member.createFromMemberCreateRequestDto(memberName, email, password);
-
         Member newMember = new Member(memberName, email, password);
 
         Member save = memberRepository.save(newMember);
@@ -85,26 +85,12 @@ public class MemberService {
     public MemberGetAllResponseDto memberGetAllService() {
         List<Member> all = memberRepository.findAllByIsDeletedFalse();
 
-        //포문
-//        List<GetAllResponseDto> allMember = new ArrayList<>();
-//
-//        for (Member member : all) {
-//            Long id = member.getId();
-//            String memberName = member.getMemberName();
-//            LocalDateTime createdAt = member.getCreatedAt();
-//            LocalDateTime updatedAt = member.getUpdatedAt();
-//
-//            GetAllResponseDto getAllResponseDto
-//                    = new GetAllResponseDto(id, memberName, createdAt, updatedAt);
-//        }
-
-        //스트림
         List<GetAllResponseDto> allMember
                 = all.stream()
                 .map(member -> new GetAllResponseDto(
                                 member.getId(), member.getMemberName(), member.getCreatedAt(), member.getUpdatedAt()
                         )
-                ).collect(Collectors.toList());
+                ).toList();
 
         return new MemberGetAllResponseDto(
                 200, "success", allMember
@@ -121,7 +107,7 @@ public class MemberService {
         String email = memberUpdateRequestDto.getEmail();
         String password = memberUpdateRequestDto.getPassword();
 
-        Member foundMember = memberRepository.findById(id)
+        Member foundMember = memberRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("member not found"));
 
         Member updateMember = foundMember.update(memberName, email, password);
@@ -134,7 +120,7 @@ public class MemberService {
      */
     @Transactional
     public MemberDeleteResponseDto memberDeleteService(Long id) {
-        Member foundMember = memberRepository.findById(id)
+        Member foundMember = memberRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("member not found"));
 
         foundMember.delete();
