@@ -3,8 +3,6 @@ package com.example.membertask.controller;
 import com.example.membertask.dto.memberdto.*;
 import com.example.membertask.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -28,21 +26,35 @@ public class MemberController {
     ) {
         return memberService.memberCreateService(memberCreateRequestDto);
     }
+    /**
+     * 로그인 api
+     */
+    @PostMapping("/login")
+    public String getMemberLoginApi(
+            @RequestBody MemberLoginRequestDto memberLoginRequestDto
+    ) {
+        String email = memberLoginRequestDto.getEmail();
+        System.out.println("email = " + email);
+        String password = memberLoginRequestDto.getPassword();
+        System.out.println("password = " + password);
+        return "로그인?";
+    }
 
     /**
      * 단건 조회 api
      */
     @GetMapping("/{id}")
-    public MemberGetSingleResponseDto getMemberSingleApi(
+    public MemberGetSingleResponseDto getMemberSingleReadApi(
             @PathVariable("id") Long id
             ) {
         return  memberService.memberGetSingleService(id);
     }
+
     /**
      * 다건 조회 api
      */
     @GetMapping
-    public MemberGetAllResponseDto getMemberAllApi(
+    public MemberGetAllResponseDto getMemberAllReadApi(
             ) {
         return memberService.memberGetAllService();
     }
