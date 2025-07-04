@@ -42,7 +42,7 @@ dependencies {
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     //아래 추가함
-    implementation 'at.favre.lib:bcrypt:0.10.2' //Bcrypt로 인코딩하기 위한 의존성 입니다.
+    implementation 'at.favre.lib:bcrypt:0.10.2' //Bcrypt 로 인코딩하기 위한 의존성 입니다.
 }
 
 tasks.named('test') {

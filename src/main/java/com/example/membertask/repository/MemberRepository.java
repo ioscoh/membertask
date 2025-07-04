@@ -9,4 +9,8 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findAllByIsDeletedFalse();
     Optional<Member> findByIdAndIsDeletedFalse(Long id);
+
+    //회원가입시 사용하는 매소드 입니다.
+    Optional<Member> findMemberByEmail(String email);
+
 }

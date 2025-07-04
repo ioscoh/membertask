@@ -81,6 +81,9 @@ public class Member {
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
+    public String getEmail() {
+        return email;
+    }
     public Boolean getIsDeleted() {
         return isDeleted;
     }

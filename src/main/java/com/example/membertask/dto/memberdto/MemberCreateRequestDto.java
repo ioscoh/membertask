@@ -11,6 +11,4 @@ public class MemberCreateRequestDto {
 
     private String password;
 
-
-
 }
