@@ -10,7 +10,10 @@ public class MemberUpdateResponseDto {
 
     private Long id;
 
-    public MemberUpdateResponseDto(Integer status, String message, Long id) {
+
+    public MemberUpdateResponseDto(
+            Integer status, String message, Long id
+    ) {
         this.status = status;
         this.message = message;
         this.id = id;

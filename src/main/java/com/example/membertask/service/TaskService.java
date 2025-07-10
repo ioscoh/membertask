@@ -50,9 +50,10 @@ public class TaskService {
 
         //저장
         Task saveTask = taskRepository.save(newTask);
-        Long saveId = saveTask.getMemberId();
+        Long saveTaskMemberIdId = saveTask.getMemberId();
+        Long saveTaskId = saveTask.getTaskId();
 
-        return new TaskCreateResponseDto(200, "success", saveId);
+        return new TaskCreateResponseDto(200, "success", saveTaskMemberIdId, saveTaskId);
     }
 
     /**
@@ -139,5 +140,4 @@ public class TaskService {
 
         return new TaskDeleteResponseDto(200, "delete");
     }
-
 }

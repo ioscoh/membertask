@@ -35,10 +35,16 @@ dependencies {
 
 
     runtimeOnly 'com.mysql:mysql-connector-j'
+
     //아래 추가함
-    runtimeOnly   'io.jsonwebtoken:jjwt-impl:0.11.5'     //  서명 구현체
-    runtimeOnly   'io.jsonwebtoken:jjwt-jackson:0.11.5' //Jackson 직렬화 바인더
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    runtimeOnly   'io.jsonwebtoken:jjwt-impl:0.11.5'     //  서명 구현체
+//    runtimeOnly   'io.jsonwebtoken:jjwt-jackson:0.11.5' //Jackson 직렬화 바인더
+//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // 위 "//아래 추가함" 의 주입 대신 아래를 사용.
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     //아래 추가함

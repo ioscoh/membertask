@@ -1,6 +1,7 @@
 package com.example.membertask.controller;
 
 import com.example.membertask.dto.memberdto.*;
+import com.example.membertask.global.jwt.JwtService;
 import com.example.membertask.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     //속
     private final MemberService memberService;
+
+    private final JwtService jwtService;
 
     //생
 
@@ -30,14 +33,10 @@ public class MemberController {
      * 로그인 api
      */
     @PostMapping("/login")
-    public String getMemberLoginApi(
+    public MemberLoginResponseDto getMemberLoginApi(
             @RequestBody MemberLoginRequestDto memberLoginRequestDto
     ) {
-        String email = memberLoginRequestDto.getEmail();
-        System.out.println("email = " + email);
-        String password = memberLoginRequestDto.getPassword();
-        System.out.println("password = " + password);
-        return "로그인?";
+        return memberService.memberLoginService(memberLoginRequestDto);
     }
 
     /**

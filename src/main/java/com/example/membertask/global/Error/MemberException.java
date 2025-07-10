@@ -7,4 +7,8 @@ public class MemberException extends RuntimeException {
         super(memberError.getMessage());
         this.memberError = memberError;
     }
+   public MemberError getMemberError(MemberError memberError) {
+     return memberError;
+   }
+
 }
